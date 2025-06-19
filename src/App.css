@@ -19,21 +19,21 @@ body {
 
 /* Header Styles */
 .app-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #4a5568;
   color: white;
   padding: 2rem 0;
   text-align: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .app-header h1 {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
 .app-header p {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-bottom: 2rem;
   opacity: 0.9;
 }
@@ -45,18 +45,18 @@ body {
 
 .search-bar input {
   width: 100%;
-  padding: 1rem 1.5rem;
+  padding: 0.875rem 1.25rem;
   border: none;
-  border-radius: 50px;
-  font-size: 1.1rem;
+  border-radius: 8px;
+  font-size: 1rem;
   background: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   outline: none;
   transition: box-shadow 0.2s;
 }
 
 .search-bar input:focus {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Main Content Layout */
@@ -72,19 +72,19 @@ body {
 .sidebar {
   flex: 0 0 280px;
   background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
+  border-radius: 8px;
+  padding: 1.25rem;
   height: fit-content;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 2rem;
 }
 
 .filters h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
   color: #1f2937;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
   padding-bottom: 0.5rem;
 }
 
@@ -157,16 +157,16 @@ body {
 /* Polo Card */
 .polo-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .polo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .polo-image-container {
@@ -184,7 +184,7 @@ body {
 }
 
 .polo-card:hover .polo-image {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .sale-badge {

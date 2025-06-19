@@ -23,7 +23,7 @@ const mockPoloData: PoloShirt[] = [
     price: 89.50,
     originalPrice: 110.00,
     image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
-    store: "Ralph Lauren",
+    store: "Macy's",
     colors: ["Navy", "White", "Red"],
     sizes: ["S", "M", "L", "XL"],
     rating: 4.5,
@@ -35,7 +35,7 @@ const mockPoloData: PoloShirt[] = [
     brand: "Lacoste",
     price: 95.00,
     image: "https://images.unsplash.com/photo-1622445275576-721325763afe?w=400&h=400&fit=crop",
-    store: "Lacoste",
+    store: "Bloomingdale's",
     colors: ["Green", "Navy", "White"],
     sizes: ["S", "M", "L", "XL", "XXL"],
     rating: 4.7,
@@ -48,7 +48,7 @@ const mockPoloData: PoloShirt[] = [
     price: 65.00,
     originalPrice: 75.00,
     image: "https://images.unsplash.com/photo-1604695573706-53170668f6a6?w=400&h=400&fit=crop",
-    store: "Nike",
+    store: "Dick's Sporting Goods",
     colors: ["Black", "Navy", "Gray"],
     sizes: ["S", "M", "L", "XL"],
     rating: 4.3,
@@ -85,11 +85,185 @@ const mockPoloData: PoloShirt[] = [
     price: 55.00,
     originalPrice: 70.00,
     image: "https://images.unsplash.com/photo-1622445275576-721325763afe?w=400&h=400&fit=crop",
-    store: "Adidas",
+    store: "Foot Locker",
     colors: ["Black", "White", "Navy"],
     sizes: ["S", "M", "L", "XL", "XXL"],
     rating: 4.4,
     reviews: 145
+  },
+  {
+    id: 7,
+    name: "Essential Cotton Polo",
+    brand: "H&M",
+    price: 24.99,
+    image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
+    store: "H&M",
+    colors: ["White", "Black", "Navy", "Gray", "Red"],
+    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+    rating: 4.0,
+    reviews: 67
+  },
+  {
+    id: 8,
+    name: "Signature Polo",
+    brand: "Tommy Hilfiger",
+    price: 79.99,
+    originalPrice: 89.99,
+    image: "https://images.unsplash.com/photo-1622445276096-b7e7fb5ab947?w=400&h=400&fit=crop",
+    store: "Kohl's",
+    colors: ["Navy", "White", "Red", "Green"],
+    sizes: ["S", "M", "L", "XL"],
+    rating: 4.3,
+    reviews: 123
+  },
+  {
+    id: 9,
+    name: "Athletic Performance Polo",
+    brand: "Under Armour",
+    price: 45.00,
+    image: "https://images.unsplash.com/photo-1604695573706-53170668f6a6?w=400&h=400&fit=crop",
+    store: "Academy Sports",
+    colors: ["Black", "Gray", "Navy", "Red"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    rating: 4.5,
+    reviews: 98
+  },
+  {
+    id: 10,
+    name: "Premium Pique Polo",
+    brand: "Brooks Brothers",
+    price: 89.50,
+    originalPrice: 120.00,
+    image: "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=400&fit=crop",
+    store: "Brooks Brothers",
+    colors: ["Navy", "White", "Light Blue"],
+    sizes: ["S", "M", "L", "XL"],
+    rating: 4.7,
+    reviews: 156
+  },
+  {
+    id: 11,
+    name: "Classic Fit Polo",
+    brand: "J.Crew",
+    price: 69.50,
+    image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
+    store: "J.Crew",
+    colors: ["Navy", "White", "Pink", "Yellow"],
+    sizes: ["XS", "S", "M", "L", "XL"],
+    rating: 4.4,
+    reviews: 87
+  },
+  {
+    id: 12,
+    name: "Performance Tech Polo",
+    brand: "Puma",
+    price: 35.00,
+    originalPrice: 45.00,
+    image: "https://images.unsplash.com/photo-1622445275576-721325763afe?w=400&h=400&fit=crop",
+    store: "Finish Line",
+    colors: ["Black", "White", "Navy", "Gray"],
+    sizes: ["S", "M", "L", "XL"],
+    rating: 4.1,
+    reviews: 73
+  },
+  {
+    id: 13,
+    name: "Essential Polo",
+    brand: "Gap",
+    price: 39.99,
+    image: "https://images.unsplash.com/photo-1622445276096-b7e7fb5ab947?w=400&h=400&fit=crop",
+    store: "Gap",
+    colors: ["White", "Black", "Navy", "Gray", "Red"],
+    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+    rating: 4.2,
+    reviews: 112
+  },
+  {
+    id: 14,
+    name: "Premium Cotton Polo",
+    brand: "Banana Republic",
+    price: 59.99,
+    originalPrice: 79.99,
+    image: "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=400&fit=crop",
+    store: "Banana Republic",
+    colors: ["Navy", "White", "Light Blue", "Gray"],
+    sizes: ["S", "M", "L", "XL"],
+    rating: 4.5,
+    reviews: 94
+  },
+  {
+    id: 15,
+    name: "Athletic Polo",
+    brand: "New Balance",
+    price: 42.00,
+    image: "https://images.unsplash.com/photo-1604695573706-53170668f6a6?w=400&h=400&fit=crop",
+    store: "New Balance",
+    colors: ["Black", "Gray", "Navy", "Red"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    rating: 4.3,
+    reviews: 68
+  },
+  {
+    id: 16,
+    name: "Classic Polo",
+    brand: "Calvin Klein",
+    price: 49.99,
+    originalPrice: 69.99,
+    image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
+    store: "Marshalls",
+    colors: ["Navy", "White", "Black", "Gray"],
+    sizes: ["S", "M", "L", "XL"],
+    rating: 4.1,
+    reviews: 45
+  },
+  {
+    id: 17,
+    name: "Performance Polo",
+    brand: "Reebok",
+    price: 38.00,
+    image: "https://images.unsplash.com/photo-1622445275576-721325763afe?w=400&h=400&fit=crop",
+    store: "Reebok",
+    colors: ["Black", "White", "Navy", "Gray"],
+    sizes: ["S", "M", "L", "XL"],
+    rating: 4.0,
+    reviews: 52
+  },
+  {
+    id: 18,
+    name: "Essential Polo",
+    brand: "Old Navy",
+    price: 19.99,
+    image: "https://images.unsplash.com/photo-1622445276096-b7e7fb5ab947?w=400&h=400&fit=crop",
+    store: "Old Navy",
+    colors: ["White", "Black", "Navy", "Gray", "Red", "Blue"],
+    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+    rating: 3.9,
+    reviews: 234
+  },
+  {
+    id: 19,
+    name: "Premium Polo",
+    brand: "Express",
+    price: 54.99,
+    originalPrice: 64.99,
+    image: "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=400&fit=crop",
+    store: "Express",
+    colors: ["Navy", "White", "Black", "Gray"],
+    sizes: ["S", "M", "L", "XL"],
+    rating: 4.2,
+    reviews: 78
+  },
+  {
+    id: 20,
+    name: "Classic Fit Polo",
+    brand: "American Eagle",
+    price: 34.99,
+    image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
+    store: "American Eagle",
+    colors: ["Navy", "White", "Black", "Gray", "Red"],
+    sizes: ["XS", "S", "M", "L", "XL"],
+    rating: 4.0,
+    reviews: 89
   }
 ];
 
@@ -233,7 +407,7 @@ const Modal: React.FC<{ polo: PoloShirt | null; onClose: () => void }> = ({ polo
 const App: React.FC = () => {
   const [selectedPolo, setSelectedPolo] = useState<PoloShirt | null>(null);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 150]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const brands = Array.from(new Set(mockPoloData.map(polo => polo.brand)));
@@ -249,7 +423,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="app-header">
-        <h1>🏆 Polo Central</h1>
+        <h1>Polo Central</h1>
         <p>Your one-stop destination for polo shirts from all your favorite stores</p>
         <div className="search-bar">
           <input
