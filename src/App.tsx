@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import axios from 'axios';
 
 interface PoloShirt {
-  id: number;
+  id: number | string;
   name: string;
   brand: string;
   price: number;
@@ -14,258 +15,6 @@ interface PoloShirt {
   rating: number;
   reviews: number;
 }
-
-const mockPoloData: PoloShirt[] = [
-  {
-    id: 1,
-    name: "Classic Fit Polo",
-    brand: "Ralph Lauren",
-    price: 89.50,
-    originalPrice: 110.00,
-    image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
-    store: "Macy's",
-    colors: ["Navy", "White", "Red"],
-    sizes: ["S", "M", "L", "XL"],
-    rating: 4.5,
-    reviews: 234
-  },
-  {
-    id: 2,
-    name: "Lacoste L.12.12 Polo",
-    brand: "Lacoste",
-    price: 95.00,
-    image: "https://images.unsplash.com/photo-1622445275576-721325763afe?w=400&h=400&fit=crop",
-    store: "Bloomingdale's",
-    colors: ["Green", "Navy", "White"],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    rating: 4.7,
-    reviews: 189
-  },
-  {
-    id: 3,
-    name: "Performance Polo",
-    brand: "Nike",
-    price: 65.00,
-    originalPrice: 75.00,
-    image: "https://images.unsplash.com/photo-1604695573706-53170668f6a6?w=400&h=400&fit=crop",
-    store: "Dick's Sporting Goods",
-    colors: ["Black", "Navy", "Gray"],
-    sizes: ["S", "M", "L", "XL"],
-    rating: 4.3,
-    reviews: 156
-  },
-  {
-    id: 4,
-    name: "Premium Cotton Polo",
-    brand: "Uniqlo",
-    price: 29.90,
-    image: "https://images.unsplash.com/photo-1622445276096-b7e7fb5ab947?w=400&h=400&fit=crop",
-    store: "Uniqlo",
-    colors: ["White", "Black", "Blue", "Gray"],
-    sizes: ["XS", "S", "M", "L", "XL"],
-    rating: 4.2,
-    reviews: 89
-  },
-  {
-    id: 5,
-    name: "Luxury Pique Polo",
-    brand: "Polo Ralph Lauren",
-    price: 125.00,
-    image: "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=400&fit=crop",
-    store: "Nordstrom",
-    colors: ["Navy", "White", "Pink"],
-    sizes: ["S", "M", "L", "XL"],
-    rating: 4.6,
-    reviews: 278
-  },
-  {
-    id: 6,
-    name: "Stretch Performance Polo",
-    brand: "Adidas",
-    price: 55.00,
-    originalPrice: 70.00,
-    image: "https://images.unsplash.com/photo-1622445275576-721325763afe?w=400&h=400&fit=crop",
-    store: "Foot Locker",
-    colors: ["Black", "White", "Navy"],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    rating: 4.4,
-    reviews: 145
-  },
-  {
-    id: 7,
-    name: "Essential Cotton Polo",
-    brand: "H&M",
-    price: 24.99,
-    image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
-    store: "H&M",
-    colors: ["White", "Black", "Navy", "Gray", "Red"],
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
-    rating: 4.0,
-    reviews: 67
-  },
-  {
-    id: 8,
-    name: "Signature Polo",
-    brand: "Tommy Hilfiger",
-    price: 79.99,
-    originalPrice: 89.99,
-    image: "https://images.unsplash.com/photo-1622445276096-b7e7fb5ab947?w=400&h=400&fit=crop",
-    store: "Kohl's",
-    colors: ["Navy", "White", "Red", "Green"],
-    sizes: ["S", "M", "L", "XL"],
-    rating: 4.3,
-    reviews: 123
-  },
-  {
-    id: 9,
-    name: "Athletic Performance Polo",
-    brand: "Under Armour",
-    price: 45.00,
-    image: "https://images.unsplash.com/photo-1604695573706-53170668f6a6?w=400&h=400&fit=crop",
-    store: "Academy Sports",
-    colors: ["Black", "Gray", "Navy", "Red"],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    rating: 4.5,
-    reviews: 98
-  },
-  {
-    id: 10,
-    name: "Premium Pique Polo",
-    brand: "Brooks Brothers",
-    price: 89.50,
-    originalPrice: 120.00,
-    image: "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=400&fit=crop",
-    store: "Brooks Brothers",
-    colors: ["Navy", "White", "Light Blue"],
-    sizes: ["S", "M", "L", "XL"],
-    rating: 4.7,
-    reviews: 156
-  },
-  {
-    id: 11,
-    name: "Classic Fit Polo",
-    brand: "J.Crew",
-    price: 69.50,
-    image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
-    store: "J.Crew",
-    colors: ["Navy", "White", "Pink", "Yellow"],
-    sizes: ["XS", "S", "M", "L", "XL"],
-    rating: 4.4,
-    reviews: 87
-  },
-  {
-    id: 12,
-    name: "Performance Tech Polo",
-    brand: "Puma",
-    price: 35.00,
-    originalPrice: 45.00,
-    image: "https://images.unsplash.com/photo-1622445275576-721325763afe?w=400&h=400&fit=crop",
-    store: "Finish Line",
-    colors: ["Black", "White", "Navy", "Gray"],
-    sizes: ["S", "M", "L", "XL"],
-    rating: 4.1,
-    reviews: 73
-  },
-  {
-    id: 13,
-    name: "Essential Polo",
-    brand: "Gap",
-    price: 39.99,
-    image: "https://images.unsplash.com/photo-1622445276096-b7e7fb5ab947?w=400&h=400&fit=crop",
-    store: "Gap",
-    colors: ["White", "Black", "Navy", "Gray", "Red"],
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
-    rating: 4.2,
-    reviews: 112
-  },
-  {
-    id: 14,
-    name: "Premium Cotton Polo",
-    brand: "Banana Republic",
-    price: 59.99,
-    originalPrice: 79.99,
-    image: "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=400&fit=crop",
-    store: "Banana Republic",
-    colors: ["Navy", "White", "Light Blue", "Gray"],
-    sizes: ["S", "M", "L", "XL"],
-    rating: 4.5,
-    reviews: 94
-  },
-  {
-    id: 15,
-    name: "Athletic Polo",
-    brand: "New Balance",
-    price: 42.00,
-    image: "https://images.unsplash.com/photo-1604695573706-53170668f6a6?w=400&h=400&fit=crop",
-    store: "New Balance",
-    colors: ["Black", "Gray", "Navy", "Red"],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    rating: 4.3,
-    reviews: 68
-  },
-  {
-    id: 16,
-    name: "Classic Polo",
-    brand: "Calvin Klein",
-    price: 49.99,
-    originalPrice: 69.99,
-    image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
-    store: "Marshalls",
-    colors: ["Navy", "White", "Black", "Gray"],
-    sizes: ["S", "M", "L", "XL"],
-    rating: 4.1,
-    reviews: 45
-  },
-  {
-    id: 17,
-    name: "Performance Polo",
-    brand: "Reebok",
-    price: 38.00,
-    image: "https://images.unsplash.com/photo-1622445275576-721325763afe?w=400&h=400&fit=crop",
-    store: "Reebok",
-    colors: ["Black", "White", "Navy", "Gray"],
-    sizes: ["S", "M", "L", "XL"],
-    rating: 4.0,
-    reviews: 52
-  },
-  {
-    id: 18,
-    name: "Essential Polo",
-    brand: "Old Navy",
-    price: 19.99,
-    image: "https://images.unsplash.com/photo-1622445276096-b7e7fb5ab947?w=400&h=400&fit=crop",
-    store: "Old Navy",
-    colors: ["White", "Black", "Navy", "Gray", "Red", "Blue"],
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
-    rating: 3.9,
-    reviews: 234
-  },
-  {
-    id: 19,
-    name: "Premium Polo",
-    brand: "Express",
-    price: 54.99,
-    originalPrice: 64.99,
-    image: "https://images.unsplash.com/photo-1618932260643-eee4a2f652a6?w=400&h=400&fit=crop",
-    store: "Express",
-    colors: ["Navy", "White", "Black", "Gray"],
-    sizes: ["S", "M", "L", "XL"],
-    rating: 4.2,
-    reviews: 78
-  },
-  {
-    id: 20,
-    name: "Classic Fit Polo",
-    brand: "American Eagle",
-    price: 34.99,
-    image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
-    store: "American Eagle",
-    colors: ["Navy", "White", "Black", "Gray", "Red"],
-    sizes: ["XS", "S", "M", "L", "XL"],
-    rating: 4.0,
-    reviews: 89
-  }
-];
 
 const PoloCard: React.FC<{ polo: PoloShirt; onClick: () => void }> = ({ polo, onClick }) => {
   return (
@@ -405,20 +154,46 @@ const Modal: React.FC<{ polo: PoloShirt | null; onClose: () => void }> = ({ polo
 };
 
 const App: React.FC = () => {
+  const [polos, setPolos] = useState<PoloShirt[]>([]);
   const [selectedPolo, setSelectedPolo] = useState<PoloShirt | null>(null);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 150]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const brands = Array.from(new Set(mockPoloData.map(polo => polo.brand)));
+  // Fetch polos from backend
+  useEffect(() => {
+    const fetchPolos = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const params: any = {
+          search: searchTerm,
+          minPrice: priceRange[0],
+          maxPrice: priceRange[1],
+        };
+        if (selectedBrands.length === 1) {
+          params.brand = selectedBrands[0];
+        }
+        const res = await axios.get('/api/polos', { params });
+        setPolos(res.data);
+      } catch (err: any) {
+        setError('Failed to fetch polo shirts. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPolos();
+  }, [searchTerm, priceRange, selectedBrands]);
 
-  const filteredPolos = mockPoloData.filter(polo => {
-    const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(polo.brand);
-    const matchesPrice = polo.price >= priceRange[0] && polo.price <= priceRange[1];
-    const matchesSearch = polo.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         polo.brand.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesBrand && matchesPrice && matchesSearch;
-  });
+  // Get all brands from current polos
+  const brands = Array.from(new Set(polos.map(polo => polo.brand)));
+
+  // Filter polos by selected brands (if multiple)
+  const filteredPolos = selectedBrands.length > 1
+    ? polos.filter(polo => selectedBrands.includes(polo.brand))
+    : polos;
 
   return (
     <div className="App">
@@ -448,16 +223,20 @@ const App: React.FC = () => {
 
         <main className="main-content">
           <div className="results-header">
-            <h2>Found {filteredPolos.length} polo shirts</h2>
+            <h2>
+              {loading ? 'Loading polo shirts...' : `Found ${filteredPolos.length} polo shirts`}
+            </h2>
+            {error && <div style={{ color: 'red', marginTop: 8 }}>{error}</div>}
           </div>
           <div className="polo-grid">
-            {filteredPolos.map(polo => (
+            {!loading && filteredPolos.map(polo => (
               <PoloCard
                 key={polo.id}
                 polo={polo}
                 onClick={() => setSelectedPolo(polo)}
               />
             ))}
+            {loading && <div>Loading...</div>}
           </div>
         </main>
       </div>
