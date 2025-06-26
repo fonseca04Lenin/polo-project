@@ -14,15 +14,26 @@ interface PoloShirt {
   sizes: string[];
   rating: number;
   reviews: number;
+  location?: string;
 }
 
+type SortOption = 'price-low' | 'price-high' | 'rating' | 'reviews' | 'name';
+
 const PoloCard: React.FC<{ polo: PoloShirt; onClick: () => void }> = ({ polo, onClick }) => {
+  const discount = polo.originalPrice ? Math.round(((polo.originalPrice - polo.price) / polo.originalPrice) * 100) : 0;
+  
   return (
     <div className="polo-card" onClick={onClick}>
       <div className="polo-image-container">
         <img src={polo.image} alt={polo.name} className="polo-image" />
         {polo.originalPrice && polo.originalPrice > polo.price && (
-          <div className="sale-badge">SALE</div>
+          <div className="sale-badge">
+            <span className="discount-text">-{discount}%</span>
+            <span className="sale-text">SALE</span>
+          </div>
+        )}
+        {polo.location && (
+          <div className="location-badge">{polo.location}</div>
         )}
       </div>
       <div className="polo-info">
@@ -56,12 +67,23 @@ const FilterSection: React.FC<{
   onBrandChange: (brands: string[]) => void;
   priceRange: [number, number];
   onPriceChange: (range: [number, number]) => void;
-}> = ({ brands, selectedBrands, onBrandChange, priceRange, onPriceChange }) => {
+  stores: string[];
+  selectedStores: string[];
+  onStoreChange: (stores: string[]) => void;
+}> = ({ brands, selectedBrands, onBrandChange, priceRange, onPriceChange, stores, selectedStores, onStoreChange }) => {
   const handleBrandToggle = (brand: string) => {
     if (selectedBrands.includes(brand)) {
       onBrandChange(selectedBrands.filter(b => b !== brand));
     } else {
       onBrandChange([...selectedBrands, brand]);
+    }
+  };
+
+  const handleStoreToggle = (store: string) => {
+    if (selectedStores.includes(store)) {
+      onStoreChange(selectedStores.filter(s => s !== store));
+    } else {
+      onStoreChange([...selectedStores, store]);
     }
   };
 
@@ -79,6 +101,20 @@ const FilterSection: React.FC<{
               onChange={() => handleBrandToggle(brand)}
             />
             {brand}
+          </label>
+        ))}
+      </div>
+
+      <div className="filter-section">
+        <h4>Stores</h4>
+        {stores.map(store => (
+          <label key={store} className="filter-checkbox">
+            <input
+              type="checkbox"
+              checked={selectedStores.includes(store)}
+              onChange={() => handleStoreToggle(store)}
+            />
+            {store}
           </label>
         ))}
       </div>
@@ -105,8 +141,40 @@ const FilterSection: React.FC<{
   );
 };
 
+const SortSection: React.FC<{
+  sortBy: SortOption;
+  onSortChange: (sort: SortOption) => void;
+}> = ({ sortBy, onSortChange }) => {
+  return (
+    <div className="sort-section">
+      <label htmlFor="sort-select">Sort by:</label>
+      <select 
+        id="sort-select"
+        value={sortBy} 
+        onChange={(e) => onSortChange(e.target.value as SortOption)}
+        className="sort-select"
+      >
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="rating">Rating</option>
+        <option value="reviews">Most Reviews</option>
+        <option value="name">Name A-Z</option>
+      </select>
+    </div>
+  );
+};
+
+const LoadingSpinner: React.FC = () => (
+  <div className="loading-spinner">
+    <div className="spinner"></div>
+    <p>Searching for polo shirts...</p>
+  </div>
+);
+
 const Modal: React.FC<{ polo: PoloShirt | null; onClose: () => void }> = ({ polo, onClose }) => {
   if (!polo) return null;
+  
+  const discount = polo.originalPrice ? Math.round(((polo.originalPrice - polo.price) / polo.originalPrice) * 100) : 0;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -115,6 +183,9 @@ const Modal: React.FC<{ polo: PoloShirt | null; onClose: () => void }> = ({ polo
         <div className="modal-body">
           <div className="modal-images">
             <img src={polo.image} alt={polo.name} className="modal-main-image" />
+            {polo.originalPrice && polo.originalPrice > polo.price && (
+              <div className="modal-sale-badge">-{discount}% OFF</div>
+            )}
           </div>
           <div className="modal-details">
             <h2>{polo.brand}</h2>
@@ -145,7 +216,10 @@ const Modal: React.FC<{ polo: PoloShirt | null; onClose: () => void }> = ({ polo
                 ))}
               </div>
             </div>
-            <a href="#" className="shop-button">Shop at {polo.store}</a>
+            <div className="modal-actions">
+              <a href="#" className="shop-button">Shop at {polo.store}</a>
+              <button className="wishlist-button">Add to Wishlist</button>
+            </div>
           </div>
         </div>
       </div>
@@ -157,10 +231,14 @@ const App: React.FC = () => {
   const [polos, setPolos] = useState<PoloShirt[]>([]);
   const [selectedPolo, setSelectedPolo] = useState<PoloShirt | null>(null);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedStores, setSelectedStores] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 150]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<SortOption>('price-low');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   // Fetch polos from backend
   useEffect(() => {
@@ -178,6 +256,7 @@ const App: React.FC = () => {
         }
         const res = await axios.get('/api/polos', { params });
         setPolos(res.data);
+        setCurrentPage(1); // Reset to first page when filters change
       } catch (err: any) {
         setError('Failed to fetch polo shirts. Please try again.');
       } finally {
@@ -187,13 +266,38 @@ const App: React.FC = () => {
     fetchPolos();
   }, [searchTerm, priceRange, selectedBrands]);
 
-  // Get all brands from current polos
+  // Get all brands and stores from current polos
   const brands = Array.from(new Set(polos.map(polo => polo.brand)));
+  const stores = Array.from(new Set(polos.map(polo => polo.store)));
 
-  // Filter polos by selected brands (if multiple)
-  const filteredPolos = selectedBrands.length > 1
-    ? polos.filter(polo => selectedBrands.includes(polo.brand))
-    : polos;
+  // Filter and sort polos
+  const filteredPolos = polos
+    .filter(polo => {
+      const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(polo.brand);
+      const matchesStore = selectedStores.length === 0 || selectedStores.includes(polo.store);
+      return matchesBrand && matchesStore;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'price-low':
+          return a.price - b.price;
+        case 'price-high':
+          return b.price - a.price;
+        case 'rating':
+          return b.rating - a.rating;
+        case 'reviews':
+          return b.reviews - a.reviews;
+        case 'name':
+          return a.name.localeCompare(b.name);
+        default:
+          return 0;
+      }
+    });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredPolos.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedPolos = filteredPolos.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="App">
@@ -209,7 +313,7 @@ const App: React.FC = () => {
           />
         </div>
       </header>
-
+      
       <div className="app-content">
         <aside className="sidebar">
           <FilterSection
@@ -218,29 +322,61 @@ const App: React.FC = () => {
             onBrandChange={setSelectedBrands}
             priceRange={priceRange}
             onPriceChange={setPriceRange}
+            stores={stores}
+            selectedStores={selectedStores}
+            onStoreChange={setSelectedStores}
           />
         </aside>
-
+        
         <main className="main-content">
           <div className="results-header">
-            <h2>
-              {loading ? 'Loading polo shirts...' : `Found ${filteredPolos.length} polo shirts`}
-            </h2>
-            {error && <div style={{ color: 'red', marginTop: 8 }}>{error}</div>}
+            <div className="results-info">
+              <h2>
+                {loading ? 'Loading polo shirts...' : `Found ${filteredPolos.length} polo shirts`}
+              </h2>
+              {error && <div className="error-message">{error}</div>}
+            </div>
+            <SortSection sortBy={sortBy} onSortChange={setSortBy} />
           </div>
+          
           <div className="polo-grid">
-            {!loading && filteredPolos.map(polo => (
-              <PoloCard
-                key={polo.id}
-                polo={polo}
-                onClick={() => setSelectedPolo(polo)}
-              />
-            ))}
-            {loading && <div>Loading...</div>}
+            {loading ? (
+              <LoadingSpinner />
+            ) : (
+              paginatedPolos.map(polo => (
+                <PoloCard
+                  key={polo.id}
+                  polo={polo}
+                  onClick={() => setSelectedPolo(polo)}
+                />
+              ))
+            )}
           </div>
+          
+          {!loading && totalPages > 1 && (
+            <div className="pagination">
+              <button 
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="pagination-btn"
+              >
+                Previous
+              </button>
+              <span className="pagination-info">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button 
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="pagination-btn"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </main>
       </div>
-
+      
       <Modal polo={selectedPolo} onClose={() => setSelectedPolo(null)} />
     </div>
   );
