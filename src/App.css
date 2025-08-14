@@ -80,6 +80,25 @@ body {
   top: 2rem;
 }
 
+.store-selection-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.store-selection-header h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.store-selection-header p {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
 .filters h3 {
   font-size: 1.25rem;
   margin-bottom: 1.25rem;
@@ -116,6 +135,69 @@ body {
 .filter-checkbox input {
   margin-right: 0.75rem;
   transform: scale(1.2);
+}
+
+/* Store Selection Styles */
+.store-checkbox {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  transition: all 0.2s;
+}
+
+.store-checkbox:hover {
+  border-color: #4a5568;
+  background-color: #f8fafc;
+}
+
+.store-checkbox input:checked + .store-logo-container {
+  background-color: #4a5568;
+  color: white;
+}
+
+.store-checkbox input:checked + .store-logo-container .store-description {
+  opacity: 0.8;
+}
+
+.store-checkbox input:checked + .store-logo-container .store-logo {
+  background-color: #4a5568;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.store-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.store-logo {
+  width: 80px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 6px;
+  background-color: white;
+  padding: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.store-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.store-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.store-description {
+  font-size: 0.8rem;
+  opacity: 0.7;
 }
 
 .price-inputs {

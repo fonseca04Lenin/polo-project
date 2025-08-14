@@ -17,7 +17,36 @@ interface PoloShirt {
   location?: string;
 }
 
+interface Store {
+  id: string;
+  name: string;
+  logo: string;
+  description: string;
+}
+
 type SortOption = 'price-low' | 'price-high' | 'rating' | 'reviews' | 'name';
+
+// Store data with logos and descriptions
+const AVAILABLE_STORES: Store[] = [
+  {
+    id: 'uniqlo',
+    name: 'Uniqlo',
+    logo: 'https://via.placeholder.com/80x40/000000/ffffff?text=UNIQLO',
+    description: 'Japanese casual wear retailer'
+  },
+  {
+    id: 'jcrew',
+    name: 'J.Crew',
+    logo: 'https://via.placeholder.com/80x40/1f2937/ffffff?text=J.CREW',
+    description: 'American clothing retailer'
+  },
+  {
+    id: 'zara',
+    name: 'Zara',
+    logo: 'https://via.placeholder.com/80x40/374151/ffffff?text=ZARA',
+    description: 'Spanish fast fashion retailer'
+  }
+];
 
 const PoloCard: React.FC<{ polo: PoloShirt; onClick: () => void }> = ({ polo, onClick }) => {
   const discount = polo.originalPrice ? Math.round(((polo.originalPrice - polo.price) / polo.originalPrice) * 100) : 0;
@@ -67,10 +96,9 @@ const FilterSection: React.FC<{
   onBrandChange: (brands: string[]) => void;
   priceRange: [number, number];
   onPriceChange: (range: [number, number]) => void;
-  stores: string[];
   selectedStores: string[];
   onStoreChange: (stores: string[]) => void;
-}> = ({ brands, selectedBrands, onBrandChange, priceRange, onPriceChange, stores, selectedStores, onStoreChange }) => {
+}> = ({ brands, selectedBrands, onBrandChange, priceRange, onPriceChange, selectedStores, onStoreChange }) => {
   const handleBrandToggle = (brand: string) => {
     if (selectedBrands.includes(brand)) {
       onBrandChange(selectedBrands.filter(b => b !== brand));
@@ -79,11 +107,11 @@ const FilterSection: React.FC<{
     }
   };
 
-  const handleStoreToggle = (store: string) => {
-    if (selectedStores.includes(store)) {
-      onStoreChange(selectedStores.filter(s => s !== store));
+  const handleStoreToggle = (storeId: string) => {
+    if (selectedStores.includes(storeId)) {
+      onStoreChange(selectedStores.filter(s => s !== storeId));
     } else {
-      onStoreChange([...selectedStores, store]);
+      onStoreChange([...selectedStores, storeId]);
     }
   };
 
@@ -107,14 +135,20 @@ const FilterSection: React.FC<{
 
       <div className="filter-section">
         <h4>Stores</h4>
-        {stores.map(store => (
-          <label key={store} className="filter-checkbox">
+        {AVAILABLE_STORES.map(store => (
+          <label key={store.id} className="filter-checkbox store-checkbox">
             <input
               type="checkbox"
-              checked={selectedStores.includes(store)}
-              onChange={() => handleStoreToggle(store)}
+              checked={selectedStores.includes(store.id)}
+              onChange={() => handleStoreToggle(store.id)}
             />
-            {store}
+            <div className="store-logo-container">
+              <img src={store.logo} alt={store.name} className="store-logo" />
+              <div className="store-info">
+                <span className="store-name">{store.name}</span>
+                <span className="store-description">{store.description}</span>
+              </div>
+            </div>
           </label>
         ))}
       </div>
@@ -259,6 +293,7 @@ const App: React.FC = () => {
         setCurrentPage(1); // Reset to first page when filters change
       } catch (err: any) {
         setError('Failed to fetch polo shirts. Please try again.');
+        setPolos([]);
       } finally {
         setLoading(false);
       }
@@ -266,15 +301,18 @@ const App: React.FC = () => {
     fetchPolos();
   }, [searchTerm, priceRange, selectedBrands]);
 
-  // Get all brands and stores from current polos
+
+
+
+
+  // Get all brands from current polos
   const brands = Array.from(new Set(polos.map(polo => polo.brand)));
-  const stores = Array.from(new Set(polos.map(polo => polo.store)));
 
   // Filter and sort polos
   const filteredPolos = polos
     .filter(polo => {
       const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(polo.brand);
-      const matchesStore = selectedStores.length === 0 || selectedStores.includes(polo.store);
+      const matchesStore = selectedStores.length === 0 || selectedStores.includes(polo.store.toLowerCase().replace(/\s+/g, ''));
       return matchesBrand && matchesStore;
     })
     .sort((a, b) => {
@@ -316,13 +354,16 @@ const App: React.FC = () => {
       
       <div className="app-content">
         <aside className="sidebar">
+          <div className="store-selection-header">
+            <h3>Choose Your Stores</h3>
+            <p>Select which stores to search for polo shirts</p>
+          </div>
           <FilterSection
             brands={brands}
             selectedBrands={selectedBrands}
             onBrandChange={setSelectedBrands}
             priceRange={priceRange}
             onPriceChange={setPriceRange}
-            stores={stores}
             selectedStores={selectedStores}
             onStoreChange={setSelectedStores}
           />
